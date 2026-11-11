@@ -66,7 +66,7 @@ them to the config file:
 
 ```toml
 [sso]
-username = '2025xxxxxx'
+username = 'xxxxxxxxx'
 password = 'your password'
 ```
 
