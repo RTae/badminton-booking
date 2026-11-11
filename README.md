@@ -1,14 +1,13 @@
 # venue-booking
 
-Book a court on a web-based venue reservation system the moment reservations open.
+Book a court on an online booking site as soon as reservations open.
 
-The script waits (overnight if you like), renews your login, tries your courts and
-times in order of preference, and keeps your Mac awake. By default you solve one
-slider captcha just before the opening time.
+The script waits until bookings open, including overnight, refreshes your login,
+and tries your preferred courts and times in order. It keeps your Mac awake while
+it waits. You solve one slider captcha just before the opening.
 
-The booking site it talks to is **not hard-coded** — you point it at your own
-site and venues in a local config file (see [Configure the site](#configure-the-site)),
-so this repository contains no particular institution's details.
+You choose which site and venues to book in a local config file, so the code
+itself names no specific site. See [Configure the site](#configure-the-site).
 
 ## Requirements
 
@@ -33,8 +32,9 @@ uv run venue-booking init-config      # writes ~/.config/venue-booking/config.to
 ### Configure the site
 
 Open `~/.config/venue-booking/config.toml` and fill in the `[site]` and `[venues]`
-sections. These come from a capture of your own browser session on the booking
-site (DevTools → Network, or a saved `.har`):
+sections. Get the values from a recording of your own browser session on the
+booking site, using your browser's developer tools (Network tab) or a saved
+`.har` file:
 
 ```toml
 [site]
@@ -50,7 +50,7 @@ dev_kind_uuid   = '...'
 class_type_uuid = '...'
 ```
 
-See [`config.example.toml`](config.example.toml) for the full, commented template.
+See [`config.example.toml`](config.example.toml) for the complete template, with comments.
 
 ### Log in
 
@@ -58,7 +58,7 @@ See [`config.example.toml`](config.example.toml) for the full, commented templat
 uv run venue-booking auth
 ```
 
-Complete sign-on in the Chrome window, including any captcha or 2FA. Later logins
+Complete sign-in in the Chrome window, including any captcha or 2FA. Later logins
 are automatic unless the site needs your input again.
 
 To let the script re-enter your credentials after the SSO session expires, add
@@ -70,8 +70,8 @@ username = 'xxxxxxxxx'
 password = 'your password'
 ```
 
-The password is stored as plain text; keep the file private (`chmod 600`).
-Alternatively, use the macOS Keychain:
+The password is stored as plain text, so keep the file private (`chmod 600`).
+Or store it in the macOS Keychain:
 
 ```bash
 uv run venue-booking auth --remember-password
@@ -111,23 +111,23 @@ uv run venue-booking book --now --date today --time 21:00
 ```
 
 Repeat `--time` and `--court` in order of preference. Times have priority over
-courts; `--any-court` accepts every court. A time selects the session containing
-it, while an exact range such as `--time 11:30-13:00` selects that session only.
+courts, and `--any-court` accepts every court. A time selects the session that
+contains it. An exact range such as `--time 11:30-13:00` selects that session only.
 
-You can save defaults in the `[booking]` section of the config file, including
-separate `[booking.weekday]` / `[booking.weekend]` choices. Command-line
-preferences override saved defaults.
+You can save defaults in the `[booking]` section of the config file, with
+separate `[booking.weekday]` and `[booking.weekend]` choices if you want them.
+Command-line preferences override saved defaults.
 
-The opening time and how many days ahead reservations open are site-specific;
-set them with `--at HH:MM` (default `08:00`) and `--date +N` (default `+3`).
-Run `uv run venue-booking book --help` for scheduling, payment, alarm, and other options.
+The opening time and how many days ahead reservations open depend on the site.
+Set them with `--at HH:MM` (default `08:00`) and `--date +N` (default `+3`).
+Run `uv run venue-booking book --help` for the scheduling, payment, and alarm options.
 
 ## Overnight checklist
 
-- Keep the Mac **plugged in, lid open, and volume up**.
+- Keep the Mac plugged in, with the lid open and the volume up.
 - Leave the terminal open and allow notifications.
-- Login is refreshed before opening (around `--login-at`, default 07:30), and the
-  captcha alarm sounds shortly before opening (default 120 s before).
+- The script refreshes your login before bookings open (at `--login-at`, default
+  07:30) and sounds the captcha alarm shortly before (default 120 seconds before).
 - Use `--dry-run` to rehearse without sending a booking request.
 
 The script keeps the Mac from idle-sleeping, but closing the lid can still put it to sleep.
@@ -138,8 +138,8 @@ The script keeps the Mac from idle-sleeping, but closing the lid can still put i
 uv run venue-booking book --auto-captcha
 ```
 
-The solver submits the slider only when it is confident; otherwise it falls back
-to the alarm and manual solving. Rehearse first:
+The solver moves the slider only when it is confident. Otherwise it rings the
+alarm so you solve it yourself. Rehearse first:
 
 ```bash
 uv run venue-booking try-captcha --auto-captcha
@@ -147,8 +147,8 @@ uv run venue-booking try-captcha --auto-captcha
 
 ## Payment
 
-- `--pay online` is the default. Pay on the website **within 60 minutes**, or the booking is cancelled.
-- `--pay offline` requires payment at the cashier before the session. Missed offline payments can affect your booking rights.
+- `--pay online` is the default. Pay on the website within 60 minutes, or the booking is cancelled.
+- `--pay offline` lets you pay at the cashier before the session. Missing an offline payment can affect your booking rights.
 
 ## Development
 
