@@ -1,17 +1,13 @@
 # venue-booking
 
-Book a court on an online booking site as soon as reservations open.
-
-The script waits until bookings open, including overnight, refreshes your login,
-and tries your preferred courts and times in order. It keeps your Mac awake while
-it waits. You solve one slider captcha just before the opening.
+Book a court on an online booking site as soon as reservations open. The script waits until bookings open, including overnight, refreshes your login,
+and tries your preferred courts and times in order. So you need your computer awake while it waits. You solve one slider captcha just before the opening.
 
 You choose which site and venues to book in a local config file, so the code
 itself names no specific site. See [Configure the site](#configure-the-site).
 
 ## Requirements
 
-- macOS with Chrome installed
 - [uv](https://docs.astral.sh/uv/)
 - An account on the booking site (single sign-on)
 
@@ -58,11 +54,9 @@ See [`config.example.toml`](config.example.toml) for the complete template, with
 uv run venue-booking auth
 ```
 
-Complete sign-in in the Chrome window, including any captcha or 2FA. Later logins
-are automatic unless the site needs your input again.
+Complete sign-in in the Chrome window, including any captcha or 2FA. Later logins are automatic unless the site needs your input again.
 
-To let the script re-enter your credentials after the SSO session expires, add
-them to the config file:
+To let the script re-enter your credentials after the SSO session expires, add them to the config file:
 
 ```toml
 [sso]
@@ -115,16 +109,13 @@ courts, and `--any-court` accepts every court. A time selects the session that
 contains it. An exact range such as `--time 11:30-13:00` selects that session only.
 
 You can save defaults in the `[booking]` section of the config file, with
-separate `[booking.weekday]` and `[booking.weekend]` choices if you want them.
-Command-line preferences override saved defaults.
+separate `[booking.weekday]` and `[booking.weekend]` choices if you want them. Command-line preferences override saved defaults.
 
-The opening time and how many days ahead reservations open depend on the site.
-Set them with `--at HH:MM` (default `08:00`) and `--date +N` (default `+3`).
-Run `uv run venue-booking book --help` for the scheduling, payment, and alarm options.
+The opening time and how many days ahead reservations open depend on the site. Set them with `--at HH:MM` (default `08:00`) and `--date +N` (default `+3`). Run `uv run venue-booking book --help` for the scheduling, payment, and alarm options.
 
 ## Overnight checklist
 
-- Keep the Mac plugged in, with the lid open and the volume up.
+- Keep the notebook plugged in, with the lid open and the volume up.
 - Leave the terminal open and allow notifications.
 - The script refreshes your login before bookings open (at `--login-at`, default
   07:30) and sounds the captcha alarm shortly before (default 120 seconds before).
