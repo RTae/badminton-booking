@@ -1,0 +1,48 @@
+# venue-booking settings — copy to ~/.config/venue-booking/config.toml
+# (or ./config.toml, which git ignores) and `chmod 600` it: it holds your password.
+# Easiest: `venue-booking init-config` creates it with the right permissions.
+#
+# Use single quotes: then special characters in the password need no escaping.
+# (If your password contains a single quote ', use double quotes and write \" for " and \\ for \.)
+
+# ---------------------------------------------------------------------------
+# The booking site. These are NOT shipped in the code — fill them in from a
+# capture of your own browser session (DevTools → Network, or a .har export):
+#   base_url : the host you book on                 (request Origin)
+#   sso_host : the single-sign-on host you log in at (where the login form is)
+#   app_id   : the `appId` query param on API calls
+#   sign_key : the key used to build the `sign` param (the site's getKeys join)
+# ---------------------------------------------------------------------------
+[site]
+base_url = ''      # e.g. 'https://booking.example.edu'
+sso_host = ''      # e.g. 'id.example.edu'
+app_id = ''
+sign_key = ''
+# site_path = '/venue/site'          # API base appended to base_url (default)
+# index_path = '/venue/index.html'   # the booking page (default)
+
+# One or more bookable venues. Copy the ids from a 'reserve/current/page'
+# request body in your capture. The first venue is the default for --venue.
+[venues.main]
+name = ''                # a label for yourself, e.g. 'Main hall'
+scene_uuid = ''
+dev_kind_uuid = ''
+class_type_uuid = ''
+# scene_use_type = 'SPORT_GROUP'   # defaults
+# class_type_enum = 'ROOM'
+
+[sso]
+username = ''   # student / staff ID, e.g. '2025xxxxxx'
+password = ''
+
+# What `book` books when you don't pass --time / --court.
+# A time picks the session containing it: '12:00' is 12:00-14:00 on weekends
+# and 11:30-13:00 on weekdays.
+[booking]
+times = ['12:00']   # in order of preference
+courts = [4, 5]     # in order of preference; [] = any court
+
+# Optional: other choices for weekdays (Mon-Fri) or weekends (Sat/Sun).
+# [booking.weekday]
+# times = ['19:00', '20:00']
+# courts = []
